@@ -21,7 +21,7 @@ Migrations
 
 * To install from scratch:
 
-    `rails generate acts_as_unlockable`
+    `rails generate acts_as_unlockable_migration`
 
   This will generate the migration script necessary for the table
 
