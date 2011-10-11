@@ -1,0 +1,5 @@
+Description:
+    run rails generate acts_as_unlockable_migration
+    
+    no need to specify any parameters after acts_as_unlockable_migration as the plugin relies on the table being named "unlocks"
+    the acts_as_unlockable_migration file will be created in db/migrate
