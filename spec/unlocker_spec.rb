@@ -74,6 +74,15 @@ describe "A class that can unlock" do
     it "should give us the total number of available unlocks remaining" do
       @user.unlocks_remaining.should == 1
     end
+    
+    it "should tell us if we have unlocks remaining" do
+      @user.unlocks_remaining?.should be_true
+    end
+    
+    it "should tell us if we don't have unlocks remaining" do
+      @user.unlock(Publication.create!)
+      @user.unlocks_remaining?.should be_false
+    end
   end
   
   context "with a Publication download limit" do
@@ -101,6 +110,15 @@ describe "A class that can unlock" do
     
     it "should give us the number of available publication unlocks remaining" do
       @user.publication_unlocks_remaining.should == 1
+    end
+    
+    it "should tell us if we have publication unlocks remaining" do
+      @user.publication_unlocks_remaining?.should be_true
+    end
+    
+    it "should tell us if we don't have publication unlocks remaining" do
+      @user.unlock(Publication.create!)
+      @user.publication_unlocks_remaining?.should be_false
     end
   end
   
