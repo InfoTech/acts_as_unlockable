@@ -109,7 +109,6 @@ module Acts #:nodoc:
         unlocks_remaining_for_type(class_name)
       elsif method.to_s =~ /_unlocks_remaining\?$/
         class_name = method.to_s.gsub(/_unlocks_remaining\?$/, '').gsub(/\W/, '').gsub('__', '::_').camelize
-        puts 'Hello' + class_name
         Kernel.const_get(class_name) rescue super
         unlocks_remaining_for_type(class_name) > 0
       else
