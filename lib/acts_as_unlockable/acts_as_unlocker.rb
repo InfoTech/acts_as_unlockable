@@ -52,8 +52,7 @@ module Acts #:nodoc:
       return false if self.unlocks.count >= global_limit
     
       if unlock_limit(unlockable) < global_limit
-        return self.unlocks.where(:unlockable_type => unlockable.class.name).count < unlock_limit(unlockable)
-                
+        return self.unlocks.where(:unlockable_type => unlockable.class.name).count < unlock_limit(unlockable)    
       else
         return self.unlocks.where(:unlockable_type => unlockable.class.name).count < global_limit
       end
@@ -68,27 +67,45 @@ module Acts #:nodoc:
     end
     
     def unlock_limit(unlockable)
-      unless self.unlock_limits.find_by_unlockable_type(unlockable.class.name).nil?
-        return self.unlock_limits.find_by_unlockable_type(unlockable.class.name).limit
+      type = unlockable.is_a?(String) ? unlockable : unlockable.class.name
+      
+      unless self.unlock_limits.find_by_unlockable_type(type).nil?
+        return self.unlock_limits.find_by_unlockable_type(type).limit
       end
-      return limits[unlockable.class.name.underscore.gsub('/', '__').to_sym] || self.infinity
+      return limits[type.underscore.gsub('/', '__').to_sym] || self.infinity
     end
     
-    def method_missing(method, *args, &block)
-      class_name = method.to_s.gsub(/^max_unlocks_for_/, '').gsub(/\W/, '').gsub('__', '::_').camelize
-      if method.to_s =~ /^max_unlocks_for_.+=$/
-        self.max_unlocks_for(class_name, args[0])
-      elsif method.to_s =~ /^max_unlocks_for_.+/
-        self.unlock_limits.find_by_unlockable_type(class_name).limit
-      else
-        super
-      end
+    def unlocks_remaining
+      return global_limit - self.unlocks.count
+    end
+    
+    def unlocks_remaining_for_type(type)
+      global_remaining = global_limit - self.unlocks.count
+      remaining = unlock_limit(type) - self.unlocks.where(:unlockable_type => type).count  
+      return [global_remaining, remaining].min
     end
     
     def max_unlocks_for(type, value)
       limit = self.unlock_limits.find_by_unlockable_type(type) || UnlockLimit.new(:unlocker => self, :unlockable_type => type)
       limit.limit = value
       limit.save!
+    end
+    
+    def method_missing(method, *args, &block)
+      class_name = method.to_s.gsub(/^max_unlocks_for_/, '').gsub(/\W/, '').gsub('__', '::_').camelize
+      if method.to_s =~ /^max_unlocks_for_.+=$/
+        Kernel.const_get(class_name) rescue super
+        self.max_unlocks_for(class_name, args[0])
+      elsif method.to_s =~ /^max_unlocks_for_.+/
+        Kernel.const_get(class_name) rescue super
+        self.unlock_limits.find_by_unlockable_type(class_name).limit
+      elsif method.to_s =~ /_unlocks_remaining$/
+        class_name = method.to_s.gsub(/_unlocks_remaining$/, '').gsub(/\W/, '').gsub('__', '::_').camelize
+        Kernel.const_get(class_name) rescue super
+        unlocks_remaining_for_type(class_name)
+      else
+        super
+      end
     end
   end
     

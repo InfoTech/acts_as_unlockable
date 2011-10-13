@@ -40,6 +40,12 @@ describe "A class that can unlock" do
     @user.max_unlocks_for_publication.should eq(2)
   end
   
+  it "should raise a method missing when max_unlocks_for is given an invalid class name" do
+    lambda { 
+      @user.max_unlocks_for_bad_class = 2
+    }.should raise_error(NoMethodError)
+  end
+  
   context "with a global download limit" do
     before(:each) do
       @user.max_unlocks = 2
@@ -64,6 +70,10 @@ describe "A class that can unlock" do
       
       lambda { @user.unlock(Publication.create) }.should raise_error(UnlockLimitReached)
     end
+    
+    it "should give us the total number of available unlocks remaining" do
+      @user.unlocks_remaining.should == 1
+    end
   end
   
   context "with a Publication download limit" do
@@ -87,6 +97,10 @@ describe "A class that can unlock" do
       @user.unlock(Publication.create!)
       
       @user.can_unlock?(Video.create!).should be_true
+    end
+    
+    it "should give us the number of available publication unlocks remaining" do
+      @user.publication_unlocks_remaining.should == 1
     end
   end
   
