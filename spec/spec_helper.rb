@@ -17,7 +17,15 @@ class User < ActiveRecord::Base
   acts_as_unlocker
 end
 
+class Guest < ActiveRecord::Base
+  acts_as_unlocker :limits => { :global => 2, :publication => 1 }
+end
+
 class Publication < ActiveRecord::Base
+  acts_as_unlockable
+end
+
+class Video < ActiveRecord::Base
   acts_as_unlockable
 end
 
