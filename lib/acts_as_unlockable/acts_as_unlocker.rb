@@ -98,23 +98,32 @@ module Acts #:nodoc:
     def method_missing(method, *args, &block)
       class_name = method.to_s.gsub(/^max_unlocks_for_/, '').gsub(/\W/, '').gsub('__', '::_').camelize
       if method.to_s =~ /^max_unlocks_for_.+=$/
-        Kernel.const_get(class_name) rescue super
+        test_class_name(class_name) rescue super
         self.max_unlocks_for(class_name, args[0])
       elsif method.to_s =~ /^max_unlocks_for_.+/
-        Kernel.const_get(class_name) rescue super
+        test_class_name(class_name) rescue super
         self.unlock_limits.find_by_unlockable_type(class_name).limit
       elsif method.to_s =~ /_unlocks_remaining$/
         class_name = method.to_s.gsub(/_unlocks_remaining$/, '').gsub(/\W/, '').gsub('__', '::_').camelize
-        Kernel.const_get(class_name) rescue super
+        test_class_name(class_name) rescue super
         unlocks_remaining_for_type(class_name)
       elsif method.to_s =~ /_unlocks_remaining\?$/
         class_name = method.to_s.gsub(/_unlocks_remaining\?$/, '').gsub(/\W/, '').gsub('__', '::_').camelize
-        Kernel.const_get(class_name) rescue super
+        test_class_name(class_name) rescue super
         unlocks_remaining_for_type(class_name) > 0
       else
         super
       end
     end
+    
+    private
+    
+    def test_class_name(str)
+      str.split('::').inject(Object) do |mod, class_name|
+        mod.const_get(class_name) rescue raise NoMethodError
+      end
+    end
+    
   end
     
   end

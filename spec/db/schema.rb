@@ -11,6 +11,10 @@ ActiveRecord::Schema.define(:version => 1) do
     t.timestamps
   end
   
+  create_table "admin_publications", :force => true do |t|
+    t.timestamps
+  end
+  
   create_table "videos", :force => true do |t|
     t.timestamps
   end

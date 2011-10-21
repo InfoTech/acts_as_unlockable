@@ -29,4 +29,10 @@ class Video < ActiveRecord::Base
   acts_as_unlockable
 end
 
+module Admin
+  class Publication < ActiveRecord::Base
+    acts_as_unlockable
+  end
+end
+
 ActiveRecord::Base.send(:include, Acts::Unlockable)

@@ -46,6 +46,12 @@ describe "A class that can unlock" do
     }.should raise_error(NoMethodError)
   end
   
+  it "should be able to set a namespaced model specific unlock limit" do
+    @user.max_unlocks_for_admin__publication = 3
+    @user.reload
+    @user.max_unlocks_for_admin__publication.should == 3
+  end
+  
   context "with a global download limit" do
     before(:each) do
       @user.max_unlocks = 2
