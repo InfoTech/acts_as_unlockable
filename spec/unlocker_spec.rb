@@ -15,7 +15,7 @@ describe "A class that can unlock" do
   it "should not create duplicate unlocks" do
     @user.unlock(@unlockable)
     
-    lambda { @user.unlock(@unlockable) }.should raise_error(AlreadyUnlocked)
+    @user.unlock(@unlockable).should be_false
     
     @user.unlocks.count.should eq(1)
   end

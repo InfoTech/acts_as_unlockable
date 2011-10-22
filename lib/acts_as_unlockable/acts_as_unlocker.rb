@@ -29,9 +29,10 @@ module Acts #:nodoc:
   module LocalInstanceMethods
     def unlock(unlockable)
       raise UnlockLimitReached unless can_unlock?(unlockable)
-      raise AlreadyUnlocked if has_unlocked?(unlockable)
+      return false if has_unlocked?(unlockable)
 
       self.unlocks.create!(:unlockable => unlockable)
+      return true
     end
     
     def has_unlocked?(unlockable)

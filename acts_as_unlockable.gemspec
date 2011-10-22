@@ -1,6 +1,6 @@
 ACTS_AS_UNLOCKABLE = Gem::Specification.new do |s|
   s.name     = "acts_as_unlockable"
-  s.version  = "1.0.4"
+  s.version  = "1.0.5"
   s.date     = "2011-10-21"
   s.summary  = "Polymorphic unlock Rails gem - Rails 3+ only"
   s.email    = ""
