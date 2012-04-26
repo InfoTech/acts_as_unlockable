@@ -40,6 +40,34 @@ describe "A class that can unlock" do
     @user.max_unlocks_for_publication.should eq(2)
   end
   
+  it "should be able to change a model specific unlock limit without creating another unlock limit object" do
+		  @user.max_unlocks_for_publication = 2
+		  @user.save!
+		  @user.reload
+		  first_count = UnlockLimit.count
+		  
+		  @user.max_unlocks_for_publication = 3
+		  @user.save!
+		  @user.reload
+		  
+		  @user.max_unlocks_for_publication.should eq(3)
+		  UnlockLimit.count.should eq(first_count)
+		end
+		
+		it "should be able to change a global unlock limit without creating another unlock limit object" do
+		  @user.max_unlocks = 2
+		  @user.save!
+		  @user.reload
+		  first_count = UnlockLimit.count
+		  
+		  @user.max_unlocks = 3
+		  @user.save!
+		  @user.reload
+		  
+		  @user.max_unlocks.should eq(3)
+		  UnlockLimit.count.should eq(first_count)
+		end
+  
   it "should raise a method missing when max_unlocks_for is given an invalid class name" do
     lambda { 
       @user.max_unlocks_for_bad_class = 2
@@ -164,5 +192,27 @@ describe "A class that can unlock" do
       
       @guest.can_unlock?(Publication.create!).should be_true    
     end
+  end
+  
+  context "when the unlocker has not been saved" do
+  	before(:each) do
+		  @unsaved_user = User.new
+		end
+		
+		it "should be able to set a global unlock limit" do
+		  @unsaved_user.max_unlocks = 2
+		  @unsaved_user.save!
+		  @unsaved_user.reload
+		  
+		  @unsaved_user.max_unlocks.should eq(2)
+		end
+		
+		it "should be able to set a model specific unlock limit" do
+		  @unsaved_user.max_unlocks_for_publication = 2
+		  @unsaved_user.save!
+		  @unsaved_user.reload
+		  
+		  @unsaved_user.max_unlocks_for_publication.should eq(2)
+		end
   end
 end

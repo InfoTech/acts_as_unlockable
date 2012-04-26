@@ -40,9 +40,9 @@ module Acts #:nodoc:
     end
     
     def max_unlocks=(value)
-      limit = self.global_unlock_limit || UnlockLimit.new(:unlocker => self)
+      limit = self.global_unlock_limit || UnlockLimit.new
       limit.limit = value
-      limit.save!
+      self.global_unlock_limit = limit
     end
     
     def max_unlocks()
@@ -91,9 +91,9 @@ module Acts #:nodoc:
     end
     
     def max_unlocks_for(type, value)
-      limit = self.unlock_limits.find_by_unlockable_type(type) || UnlockLimit.new(:unlocker => self, :unlockable_type => type)
+      limit = self.unlock_limits.find_by_unlockable_type(type) || UnlockLimit.new(:unlockable_type => type)
       limit.limit = value
-      limit.save!
+      self.unlock_limits << limit
     end
     
     def method_missing(method, *args, &block)
