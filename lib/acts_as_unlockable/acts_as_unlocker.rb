@@ -7,8 +7,8 @@ module Acts #:nodoc:
   module ClassMethods
     def acts_as_unlocker(options = {})
       has_many :unlocks, :class_name => "Unlock", :as => :unlocker, :dependent => :destroy
-      has_many :unlock_limits, :class_name => "UnlockLimit", :as => :unlocker, :dependent => :destroy, :conditions => ['unlockable_type IS NOT NULL']
-      has_one :global_unlock_limit,  :class_name => "UnlockLimit", :as => :unlocker, :dependent => :destroy, :conditions => ['unlockable_type IS NULL']
+      has_many :unlock_limits, -> { where('unlockable_type IS NOT NULL') }, :class_name => "UnlockLimit", :as => :unlocker, :dependent => :destroy
+      has_one :global_unlock_limit, -> { where('unlockable_type IS NULL') }, :class_name => "UnlockLimit", :as => :unlocker, :dependent => :destroy
       
       cattr_accessor :limits
       self.limits = options[:limits] || {}
