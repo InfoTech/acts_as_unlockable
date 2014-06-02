@@ -1,5 +1,6 @@
 # Generated from /Users/light/work/my/acts_as_commentable_with_threading/acts_as_commentable_with_threading.gemspec
-source :gemcutter
+source 'http://rubygems.org'
+
 gem "activerecord", ">= 3.0"
 gem "activesupport", ">= 3.0"
 
