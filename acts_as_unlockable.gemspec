@@ -17,5 +17,5 @@ ACTS_AS_UNLOCKABLE = Gem::Specification.new do |s|
   s.add_development_dependency 'rails', '~> 4.0'
 
   s.add_dependency 'activerecord', '>= 3.0'
-  s.add_dependency 'activesupport', '>= 3.0"'
+  s.add_dependency 'activesupport', '>= 3.0'
 end
