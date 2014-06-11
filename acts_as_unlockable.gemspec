@@ -1,6 +1,6 @@
 ACTS_AS_UNLOCKABLE = Gem::Specification.new do |s|
   s.name     = "acts_as_unlockable"
-  s.version  = "1.0.5"
+  s.version  = "1.0.6"
   s.date     = "2011-10-21"
   s.summary  = "Polymorphic unlock Rails gem - Rails 3+ only"
   s.email    = ""
@@ -11,11 +11,11 @@ ACTS_AS_UNLOCKABLE = Gem::Specification.new do |s|
   s.test_files = ["spec/unlockable_spec.rb", "spec/unlocker_spec.rb", "spec/spec_helper.rb", "spec/db/database.yml", "spec/db/schema.rb"]
 
   s.add_development_dependency 'rake'
-  s.add_development_dependency 'bundler', '~> 1.0'
-  s.add_development_dependency 'rspec', '~> 2.5'
+  s.add_development_dependency 'bundler', '~> 1.6.2'
+  s.add_development_dependency 'rspec', '~> 2.14.1'
   s.add_development_dependency 'sqlite3-ruby'
-  s.add_development_dependency 'rails', '~> 3.0'
+  s.add_development_dependency 'rails', '~> 4.0'
 
   s.add_dependency 'activerecord', '>= 3.0'
-  s.add_dependency 'activesupport', '~> 3.0'
+  s.add_dependency 'activesupport', '>= 3.0'
 end
