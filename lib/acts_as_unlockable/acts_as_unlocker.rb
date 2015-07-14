@@ -31,7 +31,7 @@ module Acts #:nodoc:
       raise UnlockLimitReached unless can_unlock?(unlockable)
       return false if has_unlocked?(unlockable)
 
-      self.unlocks.create!(:unlockable => unlockable)
+      self.unlocks.create!(:unlockable_id => unlockable.id, :unlockable_type => unlockable.class.name)
       return true
     end
     
